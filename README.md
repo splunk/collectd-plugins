@@ -10,8 +10,9 @@ C plugins for collectd:
 1. Clone the collectd repo from github:
 ``` git clone https://github.com/collectd/collectd.git ```
 
-2. Switch to collectd-5.8 branch:
-``` cd collectd && git checkout collectd-5.8 ```
+2. Switch to collectd-5.9 branch:
+``` cd collectd && git checkout collectd-5.9 ```
+For collectd-5.8, use collectd-5.8 branch here.
 
 3. Copy the plugin source files to the collectd repo:
 ``` cp ${collectd_plugins_dir}/src/* src/ ```
@@ -22,7 +23,7 @@ C plugins for collectd:
 5. Compile collectd:
 ``` ./build.sh && ./configure && make ```
 Use ``` ./configure --help ``` to see the configuration options.
-Read the collectd README file to see the rquirements to compile it.
+Read the collectd README file to see the requirements to compile it.
 For docker plugin: libyajl2 and libcurl dev packages are required.
 For write_splunk plugin: libcurl dev paackage is required.
 
@@ -52,7 +53,7 @@ git clone https://github.com/collectd/collectd.git
 cd collectd
 apt-get install -y autoconf libtool pkg-config bison byacc flex
 apt-get install -y libyajl-dev libcurl4-openssl-dev
-git checkout collectd-5.8
+git checkout collectd-5.9
 cp /collectd-plugins/src/* src/
 git apply /collectd-plugins/add-splunk-plugins.patch
 ./build.sh
