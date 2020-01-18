@@ -27,7 +27,7 @@
 #include <errno.h>
 #include <pwd.h>
 #include <regex.h>
-#include "common.h"
+#include "utils/common/common.h"
 #include "plugin.h"
 
 #define PM_MAX_PID_LEN 16

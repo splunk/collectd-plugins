@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  **/
 
-#include "common.h"
+#include "utils/common/common.h"
 #include "plugin.h"
 #include "utils_cache.h"
 #include "collectd.h"
@@ -54,8 +54,9 @@
 
 #define SEND_BUFFER_SIZE_DEFAULT 1048576
 #define WS_POST_TIMEOUT_DEFAULT 30
-#define WS_METRIC_MAX_NAME_LEN DATA_MAX_NAME_LEN * 4
+#define WS_METRIC_MAX_NAME_LEN DATA_MAX_NAME_LEN * 5
 #define WS_METRIC_MAX_VALUE_LEN 100
+#define WS_HEADER_SIZE_MAX 256
 
 struct plugin_config_s {
   char *server;
@@ -773,8 +774,9 @@ static int ws_config_curl(plugin_config_t *pl_config) {
   }
 
   /* set up splunk header for HEC */
-  char ws_header[256] = "Authorization: Splunk ";
-  strncat(ws_header, pl_config->token, strlen(pl_config->token));
+  char ws_header[WS_HEADER_SIZE_MAX] = "Authorization: Splunk ";
+  strncat(ws_header, pl_config->token,
+          WS_HEADER_SIZE_MAX - strlen(ws_header) - 1);
   pl_config->headers_l = curl_slist_append(pl_config->headers_l, ws_header);
 
   DEBUG("write_splunk plugin header: %s", pl_config->header);
@@ -848,7 +850,7 @@ static int ws_write(const data_set_t *ds, const value_list_t *vl,
 
   plugin_config_t *pl_config = user_data->data;
 
-  char metric_name[WS_METRIC_MAX_NAME_LEN] = {0};
+  char metric_name[DATA_MAX_NAME_LEN * 4] = {0};
   char dims_json[WS_METRIC_MAX_NAME_LEN] = {0};
 
   ws_transform(dims_json, metric_name, vl, pl_config);
