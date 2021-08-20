@@ -197,14 +197,20 @@ DEF_TEST(splunk_transforms) {
     char dims_json[WS_METRIC_MAX_NAME_LEN] = {0};
 
     sstrncpy(vl.plugin, cases[i].plugin, sizeof(vl.plugin));
-    if (cases[i].plugin_instance != NULL)
+    if (cases[i].plugin_instance != NULL) {
       strncpy(vl.plugin_instance, cases[i].plugin_instance,
               sizeof(vl.plugin_instance));
-    if (cases[i].type != NULL)
+      vl.plugin_instance[sizeof(vl.plugin_instance) - 1] = '\0';
+    }
+    if (cases[i].type != NULL) {
       strncpy(vl.type, cases[i].type, sizeof(vl.type));
-    if (cases[i].type_instance != NULL)
+      vl.type[sizeof(vl.type) - 1] = '\0';
+    }
+    if (cases[i].type_instance != NULL) {
       strncpy(vl.type_instance, cases[i].type_instance,
               sizeof(vl.type_instance));
+      vl.type_instance[sizeof(vl.type_instance) - 1] = '\0';
+    }
 
     ws_transform(dims_json, metric_name, &vl, &pl_config);
     EXPECT_EQ_STR(cases[i].expected_name, metric_name);
