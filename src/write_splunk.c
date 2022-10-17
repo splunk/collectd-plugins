@@ -291,6 +291,29 @@ void transform_default(char *dims_json, char *metric_name,
   if (strlen(vl->type_instance))
     snprintf(metric_name + strlen(metric_name), DATA_MAX_NAME_LEN + 1, ".%s",
              vl->type_instance);
+  
+   // Remove spaces
+  int index, j;
+  for (index = 0; metric_name[index] == ' '; index++);
+  // Removing leading spaces
+  for (j = 0; metric_name[index]; index++) {
+    metric_name[j++] = metric_name[index];
+  }
+  metric_name[j] = '\0';
+  // Removing trailing spaces
+  for (index = 0; metric_name[index] != '\0'; index++) {
+    if (metric_name[index] != ' ' && metric_name[index] != '\t')
+        j = index;
+  }
+  metric_name[j+1] = '\0';
+  // Replacing middle spaces with "_"
+  int i;
+  for (i = 0; i < strlen(metric_name); i++) {
+    if (metric_name[i] == ' ')
+      metric_name[i] = '_';
+    if (metric_name[i] == '\\')
+      metric_name[i] = '-';
+  }
 } /* }}} int transform_default */
 
 void ws_transform(char *dims_json, char *metric_name, const value_list_t *vl,
