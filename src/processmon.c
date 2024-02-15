@@ -233,6 +233,12 @@ static int pm_read_stat(process_data_t *pd, char *process_state) {
   // read the proc stat file for pid.
   snprintf(fname, sizeof(fname), "/proc/%s/stat", pd->pid);
 
+  // check in advance whether or not it still exists
+  if (access(fname, F_OK) != 0) {
+    WARNING("processmon plugin: Disappeared before reading %s", fname);
+    return 0;
+  }
+
   ssize_t status = read_file_contents(fname, buf, sizeof(buf) - 1);
   if (status <= 0) {
     ERROR("processmon plugin: Error reading %s", fname);
@@ -510,7 +516,7 @@ static int pm_read(void) {
   int total_count = 0;
 
   // variables to keep counts of process states
-  char process_state;
+  char process_state = '-';
   int state_R = 0;
   int state_S = 0;
   int state_D = 0;
